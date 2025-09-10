@@ -6,9 +6,7 @@ var h = ref(0)
 var m = ref(0)
 var s = ref(0)
 
-var bg = ref({
-  '--bg-url': "url('https://t.alcy.cc/fj')",
-})
+var bg = ref("url('https://t.alcy.cc/fj')")
 
 setInterval(() => {
   var date = new Date()
@@ -19,7 +17,7 @@ setInterval(() => {
 </script>
 
 <template>
-  <div class="underlay" :style="bg">
+  <div class="underlay" :style="{ '--bg-url': bg }">
     <circle-progress id="hour" :value="h" :valueMax="24" />
     <circle-progress id="minute" :value="m" :valueMax="60" />
     <circle-progress id="second" :value="s" :valueMax="60" />
