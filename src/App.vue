@@ -12,7 +12,8 @@ var time = ref({
 
 // 背景图片
 // var bg = ref("url('https://t.alcy.cc/fj')")
-var bg = ref("url('')")
+var bg = ref("url('./img/bg.webp')")
+// var bg = ref("url('')")
 
 // 时间更新
 setInterval(() => {

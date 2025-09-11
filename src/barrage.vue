@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { reactive, ref } from 'vue'
 
 class Barrage {
@@ -12,15 +12,15 @@ class Barrage {
 
 class BarrageTrack {
   id = ''
-  barrages = reactive([])
+  barrages = reactive<Array<number>>([])
   barrage_waiting = 0
   constructor(id = '') {
     this.id = id
-    this.barrages = reactive([])
+    this.barrages = reactive<Array<number>>([])
     this.barrage_waiting = 0
   }
 
-  sendBarrage(barrageIndex) {
+  sendBarrage(barrageIndex: number) {
     this.barrage_waiting--
     if (barrageList[barrageIndex].onShow) {
       return
@@ -29,7 +29,7 @@ class BarrageTrack {
     barrageList[barrageIndex].onShow = true
   }
 
-  removeBarrage(barrageIndex) {
+  removeBarrage(barrageIndex: number) {
     var index = barrageIndex
     this.barrages.splice(index, 1)
     barrageList[barrageIndex].onShow = false
@@ -37,9 +37,10 @@ class BarrageTrack {
 }
 
 // TODO:实现弹幕效果
+// TODO:修正typescript错误
 
-var barrageList = []
-var barrageTracks = reactive([])
+var barrageList: Array<Barrage> = []
+var barrageTracks = reactive<Array<BarrageTrack>>([])
 var barrageAmount = barrageList.length // 弹幕总数
 var onTrackAmount = 0 // 当前正在播放的弹幕数
 
@@ -53,7 +54,8 @@ async function fetchBarrage() {
 /* 初始化弹幕列表 */
 async function loadBarrageList() {
   for (let i = 0; i < 10; i++) {
-    barrageList.push(new Barrage('这是第' + i + '条弹幕', false))
+    barrageList.push(new Barrage('这是第' + i + '次喵喵', false))
+    barrageList.push(new Barrage('这是第' + i + '次汪汪', false))
   }
   for (let i = 0; i < 0; i++) {
     fetchBarrage().then((text) => {
@@ -71,7 +73,7 @@ loadBarrageList().then(() => {
       () => {
         addSomeBarrage()
       },
-      3000 * Math.random() + 100,
+      5000 * Math.random() + 200,
     )
   }, 5000)
 })
@@ -94,13 +96,16 @@ function createTrack() {
   return track
 }
 
-function findTrack(trackId) {
+function findTrack(trackId: string): BarrageTrack | undefined {
   return barrageTracks.find((track) => track.id === trackId)
 }
 
-function removeTrack(trackId) {
+function removeTrack(trackId: string) {
   var trackIndex = barrageTracks.findIndex((track) => track.id === trackId)
   var track = findTrack(trackId)
+  if (track == undefined) {
+    return
+  }
   if (track.barrages.length > 0 && track.barrage_waiting > 0) {
     return
   }
@@ -109,9 +114,9 @@ function removeTrack(trackId) {
   }
 }
 
-function createBarrage(barrageId) {
+function createBarrage(barrageId: number) {
   if (onTrackAmount >= barrageAmount) return
-  var track = null
+  var track: BarrageTrack | null = null
   if (barrageTracks.length == 0 || Math.random() <= 0.6) {
     track = createTrack()
   } else {
@@ -119,7 +124,7 @@ function createBarrage(barrageId) {
     track = findRandomTrack()
   }
   // 将弹幕加入轨道
-  if (!track) {
+  if (track == null) {
     return
   }
   track.barrage_waiting++
@@ -127,9 +132,10 @@ function createBarrage(barrageId) {
   // 延时加入，避免弹幕重叠
   setTimeout(
     () => {
+      if (track == null) return
       track.sendBarrage(barrageId)
     },
-    2000 * Math.random() + 100,
+    3000 * Math.random() + 100,
   )
 }
 
@@ -164,8 +170,8 @@ function addSomeBarrage() {
 }
 
 /* 弹幕显示结束之后的处理 */
-function animationend(trackId, barrageId) {
-  var track = findTrack(trackId)
+function animationend(trackId: string, barrageId: number) {
+  var track: BarrageTrack | undefined = findTrack(trackId)
   // 将弹幕从trackId的轨道中移除
   if (track == null) return
   track.removeBarrage(barrageId)
@@ -208,7 +214,7 @@ template {
   position: absolute;
   white-space: nowrap;
   color: white;
-  font-size: 16px;
+  font-size: 18px;
   /* font-weight: bold; */
   text-shadow: 0px 0px 4px #000000aa;
   animation: move-r2l linear 10s;
