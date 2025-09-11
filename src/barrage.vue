@@ -56,6 +56,8 @@ async function loadBarrageList() {
   for (let i = 0; i < 10; i++) {
     barrageList.push(new Barrage('这是第' + i + '次喵喵', false))
     barrageList.push(new Barrage('这是第' + i + '次汪汪', false))
+    barrageList.push(new Barrage('这是第' + i + '次咕咕', false))
+    barrageList.push(new Barrage('这是第' + i + '次嘎嘎', false))
   }
   for (let i = 0; i < 0; i++) {
     fetchBarrage().then((text) => {
@@ -181,6 +183,15 @@ function animationend(trackId: string, barrageId: number) {
 
   addSomeBarrage()
 }
+
+// GC
+setInterval(() => {
+  barrageTracks.forEach((track) => {
+    if (track.barrages.length == 0 && track.barrage_waiting == 0) {
+      removeTrack(track.id)
+    }
+  })
+}, 10000)
 </script>
 
 <template>
