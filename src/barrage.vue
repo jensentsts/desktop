@@ -53,7 +53,7 @@ async function fetchBarrage() {
 
 /* 初始化弹幕列表 */
 async function loadBarrageList() {
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 5; i++) {
     barrageList.push(new Barrage('这是第' + i + '次喵喵', false))
     barrageList.push(new Barrage('这是第' + i + '次汪汪', false))
     barrageList.push(new Barrage('这是第' + i + '次咕咕', false))
@@ -219,7 +219,7 @@ template {
   position: absolute;
   white-space: nowrap;
   color: white;
-  font-size: 18px;
+  font-size: 20px;
   /* font-weight: bold; */
   text-shadow: 0px 0px 4px #000000aa;
   animation: move-r2l linear 10s;
