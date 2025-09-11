@@ -30,7 +30,7 @@ class BarrageTrack {
   }
 
   removeBarrage(barrageIndex: number) {
-    var index = barrageIndex
+    var index = this.barrages.indexOf(barrageIndex)
     this.barrages.splice(index, 1)
     barrageList[barrageIndex].onShow = false
   }
@@ -103,14 +103,16 @@ function findTrack(trackId: string): BarrageTrack | undefined {
 }
 
 function removeTrack(trackId: string) {
-  var trackIndex = barrageTracks.findIndex((track) => track.id === trackId)
   var track = findTrack(trackId)
   if (track == undefined) {
     return
   }
-  if (track.barrages.length > 0 && track.barrage_waiting > 0) {
+  // 校验轨道是否达成删除条件
+  if (track.barrages.length > 0 || track.barrage_waiting > 0) {
     return
   }
+  var trackIndex = barrageTracks.findIndex((track) => track.id === trackId)
+  // 校验轨道是否可以 **安全** 删除
   if (trackIndex > -1) {
     barrageTracks.splice(trackIndex, 1)
   }
@@ -173,9 +175,10 @@ function addSomeBarrage() {
 
 /* 弹幕显示结束之后的处理 */
 function animationend(trackId: string, barrageId: number) {
+  console.log(trackId + ' ' + barrageId)
   var track: BarrageTrack | undefined = findTrack(trackId)
   // 将弹幕从trackId的轨道中移除
-  if (track == null) return
+  if (track == undefined) return
   track.removeBarrage(barrageId)
   onTrackAmount--
   // 如果轨道中没有弹幕了，就删除这个轨道
@@ -183,15 +186,6 @@ function animationend(trackId: string, barrageId: number) {
 
   addSomeBarrage()
 }
-
-// GC
-setInterval(() => {
-  barrageTracks.forEach((track) => {
-    if (track.barrages.length == 0 && track.barrage_waiting == 0) {
-      removeTrack(track.id)
-    }
-  })
-}, 10000)
 </script>
 
 <template>
@@ -230,6 +224,8 @@ template {
   text-shadow: 0px 0px 4px #000000aa;
   animation: move-r2l linear 10s;
   user-select: none;
+  left: 0;
+  transform: translateX(-100%);
 }
 
 @keyframes move-r2l {
