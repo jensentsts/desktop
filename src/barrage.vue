@@ -43,7 +43,7 @@ class BarrageTrack {
 }
 
 var barrageList: Array<Barrage> = []
-var barrageQueue: Array<number> = [] // TODO: 创建和删除弹幕改为循环队列
+var barrageQueue: Array<number> = []
 var barrageTracks = reactive<Array<BarrageTrack>>([])
 var barrageAmount = barrageList.length // 弹幕总数
 var onTrackAmount = 0 // 当前正在播放的弹幕数
@@ -175,9 +175,13 @@ function addSomeBarrage() {
       if (!barrageList[j].onShow) {
         // 30%的可能性抽中此弹幕
         if (Math.random() >= 0.2) {
+          barrageQueue.push(barrageQueue[0])
+          barrageQueue.shift()
           continue
         }
-        barrageId = j
+        barrageId = barrageQueue[0]
+        barrageQueue.push(barrageQueue[0])
+        barrageQueue.shift()
         break
       }
     }
