@@ -167,13 +167,13 @@ function addSomeBarrage() {
       }
       if (!barrageList[j].onShow) {
         // 70%的可能性抽中此弹幕
-        if (Math.random() >= 0.3) continue
+        if (Math.random() <= 0.3) continue
         barrageId = j
         break
       }
     }
     if (barrageId == -1) {
-      break
+      continue
     }
     createBarrage(barrageId)
   }
