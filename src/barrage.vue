@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import data from './barrages.json' // TODO: 应用data里的弹幕
+import data from './barrages.json'
 
 console.log(data)
 
 class Barrage {
   text = ''
   onShow = false
-  color = '#ffffff'
-  constructor(text: string = '', color: string = '#ffffff') {
+  color = '#FFFFFF'
+  constructor(text: string = '', color: string = '#FFFFFF') {
     this.text = text
     this.onShow = false
     this.color = color
@@ -43,6 +43,7 @@ class BarrageTrack {
 }
 
 var barrageList: Array<Barrage> = []
+var barrageQueue: Array<number> = [] // TODO: 创建和删除弹幕改为循环队列
 var barrageTracks = reactive<Array<BarrageTrack>>([])
 var barrageAmount = barrageList.length // 弹幕总数
 var onTrackAmount = 0 // 当前正在播放的弹幕数
@@ -55,7 +56,7 @@ async function fetchBarrage() {
 }
 
 /* 初始化弹幕列表 */
-async function loadBarrageList() {
+async function loadBarrage() {
   for (let i = 0; i < 0; i++) {
     fetchBarrage().then((text) => {
       barrageList.push(new Barrage(text))
@@ -69,27 +70,30 @@ async function loadBarrageList() {
   for (let danmu in data['without_color']) {
     barrageList.push(new Barrage(data['without_color'][danmu]))
   }
+  barrageAmount = barrageList.length
+
+  barrageQueue = Array.from({ length: barrageAmount }).map((v, k) => k)
+
   console.log('加载完毕')
 }
 
-loadBarrageList().then(() => {
-  barrageAmount = barrageList.length
+loadBarrage().then(() => {
   addSomeBarrage()
   setInterval(() => {
     setTimeout(
       () => {
         addSomeBarrage()
       },
-      5000 * Math.random() + 200,
+      5000 * Math.random() + 500,
     )
-  }, 5000)
+  }, 3000)
 })
 
 function findRandomTrack() {
   if (barrageTracks.length == 0) {
-    return null
+    return undefined
   }
-  var trackIndex = Math.floor(Math.random() * barrageTracks.length)
+  let trackIndex = Math.floor(Math.random() * barrageTracks.length)
   return barrageTracks[trackIndex]
 }
 
@@ -97,8 +101,8 @@ function createTrack() {
   if (barrageTracks.length >= barrageAmount) {
     return findRandomTrack()
   }
-  var trackId = 'track-' + Math.floor(Math.random() * 1000000)
-  var track = new BarrageTrack(trackId)
+  let trackId = 'track-' + Math.floor(Math.random() * 1000000)
+  let track = new BarrageTrack(trackId)
   barrageTracks.push(reactive(track))
   return track
 }
@@ -108,7 +112,7 @@ function findTrack(trackId: string): BarrageTrack | undefined {
 }
 
 function removeTrack(trackId: string) {
-  var track = findTrack(trackId)
+  let track = findTrack(trackId)
   if (track == undefined) {
     return
   }
@@ -116,7 +120,7 @@ function removeTrack(trackId: string) {
   if (track.barrages.length > 0 || track.barrage_waiting > 0) {
     return
   }
-  var trackIndex = barrageTracks.findIndex((track) => track.id === trackId)
+  let trackIndex = barrageTracks.findIndex((track) => track.id === trackId)
   // 校验轨道是否可以 **安全** 删除
   if (trackIndex > -1) {
     barrageTracks.splice(trackIndex, 1)
@@ -125,8 +129,7 @@ function removeTrack(trackId: string) {
 
 function createBarrage(barrageId: number) {
   if (onTrackAmount >= barrageAmount) return
-  if (barrageTracks.length >= barrageAmount / 2) return
-  var track: BarrageTrack | null = null
+  let track: BarrageTrack | undefined = undefined
   if (barrageTracks.length == 0 || Math.random() <= 0.6) {
     track = createTrack()
   } else {
@@ -134,7 +137,7 @@ function createBarrage(barrageId: number) {
     track = findRandomTrack()
   }
   // 将弹幕加入轨道
-  if (track == null) {
+  if (track == undefined) {
     return
   }
   track.barrage_waiting++
@@ -142,7 +145,7 @@ function createBarrage(barrageId: number) {
   // 延时加入，避免弹幕重叠
   setTimeout(
     () => {
-      if (track == null) return
+      if (track == undefined) return
       track.sendBarrage(barrageId)
     },
     3000 * Math.random() + 100,
@@ -152,42 +155,50 @@ function createBarrage(barrageId: number) {
 /* 将一些弹幕重新加入轨道 */
 function addSomeBarrage() {
   // 生成随机的数量
-  var sendAmount = Math.floor(Math.random() * (barrageAmount - onTrackAmount)) + 1
+  let sendAmount = Math.floor(Math.random() * (barrageAmount - onTrackAmount)) + 1
   // 不多于40%的弹幕
   if (sendAmount > Math.floor(barrageAmount * 0.3)) {
     sendAmount = Math.floor(barrageAmount * 0.3)
   }
-  for (let i = 0; i < sendAmount; i++) {
+  let cnt = 0
+  while (cnt < sendAmount) {
     // 抽一条未显示的弹幕
-    var barrageId = -1
-    for (let j = 0; barrageId == -1; j++) {
+    let barrageId = -1
+    let j = -1
+    while (barrageId == -1) {
       // 防溢出
       if (j >= barrageAmount) {
-        j = 0
+        break
       }
+      j++
+
       if (!barrageList[j].onShow) {
-        // 70%的可能性抽中此弹幕
-        if (Math.random() <= 0.3) continue
+        // 30%的可能性抽中此弹幕
+        if (Math.random() >= 0.2) {
+          continue
+        }
         barrageId = j
         break
       }
     }
+    // 未找到合适的弹幕
     if (barrageId == -1) {
-      continue
+      return
     }
     createBarrage(barrageId)
+    cnt++
   }
 }
 
 /* 弹幕显示结束之后的处理 */
 function animationend(trackId: string, barrageId: number) {
-  var track: BarrageTrack | undefined = findTrack(trackId)
+  let track: BarrageTrack | undefined = findTrack(trackId)
   // 将弹幕从trackId的轨道中移除
   if (track == undefined) return
   track.removeBarrage(barrageId)
   onTrackAmount--
   // 如果轨道中没有弹幕了，就删除这个轨道
-  // removeTrack(trackId)
+  removeTrack(trackId)
 
   addSomeBarrage()
 }
