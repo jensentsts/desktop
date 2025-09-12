@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
+import data from './barrages.json' // TODO: 应用data里的弹幕
+
+console.log(data)
 
 class Barrage {
   text = ''
   onShow = false
-  constructor(text = '', onShow = false) {
+  color = '#ffffff'
+  constructor(text: string = '', color: string = '#ffffff') {
     this.text = text
-    this.onShow = onShow
+    this.onShow = false
+    this.color = color
+    console.log(text)
   }
 }
 
@@ -36,9 +42,6 @@ class BarrageTrack {
   }
 }
 
-// TODO:实现弹幕效果
-// TODO:修正typescript错误
-
 var barrageList: Array<Barrage> = []
 var barrageTracks = reactive<Array<BarrageTrack>>([])
 var barrageAmount = barrageList.length // 弹幕总数
@@ -53,16 +56,18 @@ async function fetchBarrage() {
 
 /* 初始化弹幕列表 */
 async function loadBarrageList() {
-  for (let i = 0; i < 5; i++) {
-    barrageList.push(new Barrage('这是第' + i + '次喵喵', false))
-    barrageList.push(new Barrage('这是第' + i + '次汪汪', false))
-    barrageList.push(new Barrage('这是第' + i + '次咕咕', false))
-    barrageList.push(new Barrage('这是第' + i + '次嘎嘎', false))
-  }
   for (let i = 0; i < 0; i++) {
     fetchBarrage().then((text) => {
-      barrageList.push(new Barrage(text, false))
+      barrageList.push(new Barrage(text))
     })
+  }
+  for (let danmu in data['with_color']) {
+    let text = data['with_color'][danmu]['text']
+    let color = data['with_color'][danmu]['color']
+    barrageList.push(new Barrage(text, color))
+  }
+  for (let danmu in data['without_color']) {
+    barrageList.push(new Barrage(data['without_color'][danmu]))
   }
   console.log('加载完毕')
 }
@@ -120,6 +125,7 @@ function removeTrack(trackId: string) {
 
 function createBarrage(barrageId: number) {
   if (onTrackAmount >= barrageAmount) return
+  if (barrageTracks.length >= barrageAmount / 2) return
   var track: BarrageTrack | null = null
   if (barrageTracks.length == 0 || Math.random() <= 0.6) {
     track = createTrack()
@@ -175,14 +181,13 @@ function addSomeBarrage() {
 
 /* 弹幕显示结束之后的处理 */
 function animationend(trackId: string, barrageId: number) {
-  console.log(trackId + ' ' + barrageId)
   var track: BarrageTrack | undefined = findTrack(trackId)
   // 将弹幕从trackId的轨道中移除
   if (track == undefined) return
   track.removeBarrage(barrageId)
   onTrackAmount--
   // 如果轨道中没有弹幕了，就删除这个轨道
-  removeTrack(trackId)
+  // removeTrack(trackId)
 
   addSomeBarrage()
 }
@@ -192,8 +197,9 @@ function animationend(trackId: string, barrageId: number) {
   <div v-for="track in barrageTracks" :key="track.id" class="track">
     <div
       v-for="barrageId in track.barrages"
-      :key="barrageId"
       class="barrage"
+      :key="barrageId"
+      :style="{ color: barrageList[barrageId].color }"
       @animationend="animationend(track.id, barrageId)"
     >
       {{ barrageList[barrageId].text }}
@@ -221,11 +227,15 @@ template {
   color: white;
   font-size: 20px;
   /* font-weight: bold; */
-  text-shadow: 0px 0px 4px #000000aa;
+  text-shadow: 0px 0px 4px #0009;
   animation: move-r2l linear 10s;
   user-select: none;
   left: 0;
   transform: translateX(-100%);
+}
+
+.barrage:hover {
+  animation-play-state: paused;
 }
 
 @keyframes move-r2l {

@@ -2,6 +2,7 @@
 import { reactive, ref } from 'vue'
 import CircleProgress from './circle_progress.vue'
 import Barrage from './barrage.vue'
+import Components from './components/components.vue'
 
 // 时间
 var time = ref({
@@ -26,16 +27,20 @@ setInterval(() => {
 
 <template>
   <div class="hang bg" style="background-image: url('./img/bg.jpg')"></div>
-  <barrage class="hang" />
   <div class="hang">
     <circle-progress id="hour" :value="time.h" :valueMax="24" />
     <circle-progress id="minute" :value="time.m" :valueMax="60" />
     <circle-progress id="second" :value="time.s" :valueMax="60" />
   </div>
   <barrage class="hang" />
+  <Components class="hang"></Components>
 </template>
 
 <style scoped>
+template {
+  overflow: hidden;
+}
+
 .hang {
   position: fixed;
   top: 0;
@@ -58,6 +63,9 @@ setInterval(() => {
 
 barrage {
   z-index: 0;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
 }
 
 circle-progress {
