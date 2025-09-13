@@ -2,8 +2,6 @@
 import { reactive, ref } from 'vue'
 import data from './barrages.json'
 
-console.log(data)
-
 class Barrage {
   text = ''
   onShow = false
@@ -12,7 +10,6 @@ class Barrage {
     this.text = text
     this.onShow = false
     this.color = color
-    console.log(text)
   }
 }
 
@@ -73,8 +70,6 @@ async function loadBarrage() {
   barrageAmount = barrageList.length
 
   barrageQueue = Array.from({ length: barrageAmount }).map((v, k) => k)
-
-  console.log('加载完毕')
 }
 
 loadBarrage().then(() => {
@@ -208,7 +203,7 @@ function animationend(trackId: string, barrageId: number) {
 }
 </script>
 
-<template>
+<template class="barrage-container">
   <div v-for="track in barrageTracks" :key="track.id" class="track">
     <div
       v-for="barrageId in track.barrages"
@@ -223,7 +218,7 @@ function animationend(trackId: string, barrageId: number) {
 </template>
 
 <style scoped>
-template {
+.barrage-container {
   /* track应当自动地纵向排列 */
   display: flex;
   flex-direction: column;
