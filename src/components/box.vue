@@ -5,8 +5,8 @@ const props = withDefaults(
   defineProps<{
     title?: string
     id?: string | number
-    use_expand: boolean
-    use_hide: boolean
+    use_expand?: boolean
+    use_hide?: boolean
   }>(),
   {
     title: '无标题',
@@ -31,12 +31,12 @@ function after_animation() {
 }
 
 function before_expand() {
-  emit('expand', props.id)
+  emit.caller('expand', props.id)
 }
 
 function before_close() {
   alive.value = false
-  emit('close', props.id)
+  emit.caller('close', props.id)
 }
 
 function hide() {
