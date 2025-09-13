@@ -114,7 +114,7 @@ function box_close() {
   overflow: hidden;
   font-size: 14px;
   user-select: none;
-  width: 350px;
+  width: 360px;
   margin: 5px auto;
   transition: all 0.4s;
   font-family: var(--font-name);

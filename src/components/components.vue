@@ -62,7 +62,7 @@ setTimeout(() => {
   display: flex;
   flex-direction: column;
   border-radius: 12px;
-  padding: 4px 8px;
+  padding: 8px 12px;
   box-shadow: 0px 0px 0px #666a;
   transition: all 0.3s;
   overflow: hidden;
