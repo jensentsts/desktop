@@ -59,12 +59,13 @@ if (select == 'tianqiapi') {
     style="--content-bgcolor: #01c3; --content-bgcolor-hover: #0cf; color: white"
   >
     <div class="wther-content">
-      <div class="temperature">{{ temperature }}°</div>
-      <span class="wther-text">
+      <div class="temperature">{{ temperature }}℃</div>
+      <div class="wther-sep"></div>
+      <div class="wther-text">
         <span class="wther-city">{{ city_name }} {{ weather }}</span>
         <span class="wther-area"></span>
-        <span class="wther-details">{{ temperature_min }}°-{{ temperature_max }}°</span>
-      </span>
+        <span class="wther-details">{{ temperature_min }}℃-{{ temperature_max }}℃</span>
+      </div>
     </div>
   </box>
 </template>
@@ -78,6 +79,10 @@ if (select == 'tianqiapi') {
 
 .temperature {
   font-size: 32px;
+}
+
+.wther-sep {
+  width: 16px;
 }
 
 .wther-text {

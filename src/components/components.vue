@@ -23,21 +23,19 @@ function switcher(id: String | undefined) {
   else s2.value = false
 }
 
-function wther_report(title: string, text: string) {
-  console.log(title, text)
+function append(title: string, text: string) {
   msg_list.push(new Msg(title, text))
 }
 
-function test(id: string) {
-  alert('草' + id)
-}
+setTimeout(() => {
+  append('每日祝福', '今天也是好日子哇~~~')
+}, 2000)
 </script>
 
 <template>
   <div class="components-container">
-    <weather @report="wther_report" />
+    <weather @report="append" />
     <Timetable />
-    <Box title="消息" @close="test" id="啊啊啊">Enjoy every moment<br />in every day!</Box>
     <Box v-for="msg in msg_list" :title="msg.title">
       {{ msg.text }}
     </Box>
@@ -49,7 +47,7 @@ function test(id: string) {
   display: flex;
   flex-direction: column;
   border-radius: 12px;
-  padding: 4px 16px;
+  padding: 4px 8px;
   box-shadow: 0px 0px 0px #666a;
   transition: all 0.3s;
   overflow: hidden;

@@ -18,7 +18,10 @@ const props = withDefaults(
   },
 )
 
-const emit = defineEmits<{ (e: 'close', id: string): void; (e: 'expand', id: string): void }>()
+const emit = defineEmits<{
+  (e: 'close', id: string | number): void
+  (e: 'expand', id: string | number): void
+}>()
 
 var alive = ref(true)
 var this_style = ref({})
@@ -91,6 +94,7 @@ function box_close() {
   --topbar-bgcolor-hover: #0cf;
   --content-bgcolor: #fff6;
   --content-bgcolor-hover: #fff;
+  --font-name: 'JetBrains Mono';
 }
 
 .rt-box {
@@ -99,11 +103,12 @@ function box_close() {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-size: 12px;
+  font-size: 14px;
   user-select: none;
-  width: 280px;
+  width: 350px;
   margin: 5px auto;
   transition: all 0.4s;
+  font-family: var(--font-name);
 
   animation: to-join 1s ease-out;
 }
