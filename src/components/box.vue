@@ -25,7 +25,7 @@ const emit = defineEmits<{
 }>()
 
 var alive = ref(true)
-var this_style = ref({})
+var this_style = ref({ animation: 'to-join 1s ease-out' })
 var is_hiding = ref(false)
 
 var read_to_close = false
@@ -34,6 +34,9 @@ function after_animation() {
   if (read_to_close) {
     before_close()
   }
+  // 抵制vue优化带来的bug
+  this_style.value = {}
+  read_to_close = false
 }
 
 function before_expand() {
@@ -115,8 +118,6 @@ function box_close() {
   margin: 5px auto;
   transition: all 0.4s;
   font-family: var(--font-name);
-
-  animation: to-join 1s ease-out;
 }
 
 .rt-box:hover {

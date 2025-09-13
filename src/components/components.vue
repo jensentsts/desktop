@@ -22,7 +22,7 @@ class Msg {
 var s1 = ref(true)
 var s2 = ref(true)
 
-var msg_list = ref<Array<Msg>>([])
+var msg_list = reactive<Array<Msg>>([])
 
 function switcher(id: String | undefined) {
   if (id == 's1') s1.value = false
@@ -30,14 +30,16 @@ function switcher(id: String | undefined) {
 }
 
 function append(title: string, text: string) {
-  msg_list.value.push(new Msg(title, text))
+  msg_list.push(new Msg(title, text))
 }
 
 function remove(id: string | number) {
-  let target = msg_list.value.findIndex((obj) => obj.id === id)
-  if (target !== -1) return
+  console.log('1', msg_list)
+  let target = msg_list.findIndex((obj) => obj.id === id)
+  if (target === -1) return
   console.log(target)
-  msg_list.value.splice(target, 1)
+  msg_list.splice(target, 1)
+  console.log('2', msg_list)
 }
 
 setTimeout(() => {
