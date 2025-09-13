@@ -7,16 +7,22 @@ import weather from './weather.vue'
 class Msg {
   title: string = '空标题'
   text: string = '请输入内容'
-  constructor(title: string = '空标题', text: string = '请输入内容') {
+  id: string | number = 0
+  constructor(
+    title: string = '空标题',
+    text: string = '请输入内容',
+    id: string | number = Math.random() * Math.random(),
+  ) {
     this.title = title
     this.text = text
+    this.id = id
   }
 }
 
 var s1 = ref(true)
 var s2 = ref(true)
 
-var msg_list = reactive<Array<Msg>>([])
+var msg_list = ref<Array<Msg>>([])
 
 function switcher(id: String | undefined) {
   if (id == 's1') s1.value = false
@@ -24,7 +30,14 @@ function switcher(id: String | undefined) {
 }
 
 function append(title: string, text: string) {
-  msg_list.push(new Msg(title, text))
+  msg_list.value.push(new Msg(title, text))
+}
+
+function remove(id: string | number) {
+  let target = msg_list.value.findIndex((obj) => obj.id === id)
+  if (target !== -1) return
+  console.log(target)
+  msg_list.value.splice(target, 1)
 }
 
 setTimeout(() => {
@@ -36,7 +49,7 @@ setTimeout(() => {
   <div class="components-container">
     <weather @report="append" />
     <Timetable />
-    <Box v-for="msg in msg_list" :title="msg.title">
+    <Box v-for="msg in msg_list" :title="msg.title" :id="msg.id" @close="remove">
       {{ msg.text }}
     </Box>
   </div>

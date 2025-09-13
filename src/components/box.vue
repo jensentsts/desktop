@@ -21,6 +21,7 @@ const props = withDefaults(
 const emit = defineEmits<{
   (e: 'close', id: string | number): void
   (e: 'expand', id: string | number): void
+  (e: 'click', id: string | number): void
 }>()
 
 var alive = ref(true)
@@ -49,7 +50,7 @@ function hide() {
 }
 
 function box_close() {
-  this_style.value = { animation: 'to-close .3s' }
+  this_style.value = { animation: 'to-close .3s ease-in' }
   read_to_close = true
 }
 
@@ -59,7 +60,12 @@ function box_close() {
 <script lang="ts"></script>
 
 <template>
-  <div v-if="alive" class="rt-box" @animationend="after_animation()" :style="this_style">
+  <div
+    class="rt-box"
+    @animationend="after_animation()"
+    @click="emit('click', props.id)"
+    :style="this_style"
+  >
     <div class="box-top-bar">
       <span class="box-title">
         {{ title }}

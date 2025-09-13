@@ -15,6 +15,7 @@ var air_condition = ref('')
 var weather = ref('晴')
 
 var k_data = weather_key[select]
+var wther_data = {}
 
 /*if (select == 'gaode') {
   let url = k_data['url'].replace('{key}', k_data['key']).replace('{city}', k_data['city_code'])
@@ -38,7 +39,7 @@ if (select == 'tianqiapi') {
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data)
+      wther_data = data
       city_name.value = data.city
       weather.value = data['wea']
       temperature.value = data['tem'].split('.')[0]
@@ -50,12 +51,17 @@ if (select == 'tianqiapi') {
       }
     })
 }
+
+function air_condition_report(id: string | number) {
+  emit('report', '空气质量：' + wther_data['air_level'], wther_data['air_tips'])
+}
 </script>
 
 <template>
   <box
     title="天气"
     :content_rid_padding_top="true"
+    @click="air_condition_report"
     style="--content-bgcolor: #01c3; --content-bgcolor-hover: #0cf; color: white"
   >
     <div class="wther-content">

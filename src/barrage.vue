@@ -117,7 +117,7 @@ function removeTrack(trackId: string) {
   }
   let trackIndex = barrageTracks.findIndex((track) => track.id === trackId)
   // 校验轨道是否可以 **安全** 删除
-  if (trackIndex > -1) {
+  if (trackIndex !== -1) {
     barrageTracks.splice(trackIndex, 1)
   }
 }
