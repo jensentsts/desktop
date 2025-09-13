@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import Box from './box.vue'
 import Timetable from './Timetable.vue'
+import weather from './weather.vue'
 
 var s1 = ref(true)
 var s2 = ref(true)
@@ -14,8 +15,8 @@ function switcher(id: String | undefined) {
 
 <template>
   <div class="components-container">
+    <weather />
     <Timetable />
-    <Box title="你好" id="s1">World!</Box>
     <Box title="你好世界">The World! <br />世界 is so good </Box>
   </div>
 </template>

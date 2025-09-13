@@ -7,12 +7,14 @@ const props = withDefaults(
     id?: string | number
     use_expand?: boolean
     use_hide?: boolean
+    content_rid_padding_top?: boolean
   }>(),
   {
     title: '无标题',
     id: '',
     use_expand: false,
     use_hide: true,
+    content_rid_padding_top: false,
   },
 )
 
@@ -48,34 +50,47 @@ function box_close() {
   read_to_close = true
 }
 
-// TODO: 不同配色
+// TODO: 不同主题配色
 </script>
 
 <script lang="ts"></script>
 
 <template>
   <div v-if="alive" class="rt-box" @animationend="after_animation()" :style="this_style">
-    <div class="top-bar">
-      <span class="title">
+    <div class="box-top-bar">
+      <span class="box-title">
         {{ title }}
       </span>
-      <span class="blank-area"></span>
-      <span class="buttons">
-        <span v-if="use_expand" class="button expand" @click="before_expand()"></span>
-        <span v-if="use_hide" class="button hide" @click="hide()"></span>
-        <span class="button close" @click="box_close()"></span>
+      <span class="box-blank-area"></span>
+      <span class="box-buttons">
+        <span v-if="use_expand" class="box-button box-expand" @click="before_expand()"></span>
+        <span v-if="use_hide" class="box-button box-hide" @click="hide()"></span>
+        <span class="box-button box-close" @click="box_close()"></span>
       </span>
     </div>
-    <div class="content" v-if="!is_hiding">
+    <div
+      class="box-content"
+      v-if="!is_hiding"
+      :class="['box-content', content_rid_padding_top ? 'rid-padding-top' : '']"
+    >
       <slot></slot>
     </div>
   </div>
 </template>
 
+<style scoped>
+.rid-padding-top {
+  padding-top: 0px;
+}
+</style>
+
 <style>
 .rt-box {
-  --color: '';
   --border-radius: 8px;
+  --topbar-bgcolor: #01c3;
+  --topbar-bgcolor-hover: #0cf;
+  --content-bgcolor: #fff6;
+  --content-bgcolor-hover: #fff;
 }
 
 .rt-box {
@@ -97,48 +112,47 @@ function box_close() {
   box-shadow: 0px 0px 14px #666a;
 }
 
-.rt-box:hover .top-bar {
-  background-color: #0cff;
+.rt-box:hover .box-top-bar {
+  background-color: var(--topbar-bgcolor-hover);
 }
 
-.rt-box:hover .content {
-  background-color: #fff;
+.rt-box:hover .box-content {
+  background-color: var(--content-bgcolor-hover);
 }
 
-.rt-box:hover .close {
+.rt-box:hover .box-close {
   background-color: #ffa500;
 }
 
-.rt-box:hover .expand {
+.rt-box:hover .box-expand {
   background-color: #0fa;
 }
 
-.rt-box:hover .hide {
+.rt-box:hover .box-hide {
   background-color: #0ff;
 }
 
-.top-bar {
-  background-color: #01c3;
-  border-bottom: none;
+.box-top-bar {
+  background-color: var(--topbar-bgcolor);
   display: flex;
 }
 
-.title {
+.box-title {
   color: white;
 }
 
-.blank-area {
+.box-blank-area {
   flex-grow: 1;
   min-width: 0px;
 }
 
-.buttons {
+.box-buttons {
   margin-left: auto;
   color: white;
   display: flex;
 }
 
-.button {
+.box-button {
   margin-left: 5px;
   margin-right: 0px;
   border-radius: 50%;
@@ -149,25 +163,25 @@ function box_close() {
   transition: all 0.3s;
 }
 
-.top-bar,
-.content {
+.box-top-bar,
+.box-content {
   padding: 9px;
   transition: all 0.2s;
 }
 
-.content {
-  background-color: #fff6;
+.box-content {
+  background-color: var(--content-bgcolor);
 }
 
-.expand {
+.box-expand {
   background-color: #0fa6;
 }
 
-.hide {
+.box-hide {
   background-color: #0ff6;
 }
 
-.close {
+.box-close {
   background-color: #ffa50066;
 }
 
