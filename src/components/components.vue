@@ -17,7 +17,7 @@ function switcher(id: String | undefined) {
   <div class="components-container">
     <weather />
     <Timetable />
-    <Box title="你好世界">The World! <br />世界 is so good </Box>
+    <Box title="消息">Enjoy every moment<br />in every day!</Box>
   </div>
 </template>
 

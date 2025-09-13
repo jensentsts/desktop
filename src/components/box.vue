@@ -135,6 +135,7 @@ function box_close() {
 .box-top-bar {
   background-color: var(--topbar-bgcolor);
   display: flex;
+  font-weight: bold;
 }
 
 .box-title {
