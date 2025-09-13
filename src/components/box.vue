@@ -18,7 +18,7 @@ const props = withDefaults(
   },
 )
 
-const emit = defineEmits(['close:id', 'expand:id'])
+const emit = defineEmits<{ (e: 'close', id: string): void; (e: 'expand', id: string): void }>()
 
 var alive = ref(true)
 var this_style = ref({})
@@ -33,12 +33,12 @@ function after_animation() {
 }
 
 function before_expand() {
-  emit.caller('expand', props.id)
+  emit('expand', props.id)
 }
 
 function before_close() {
   alive.value = false
-  emit.caller('close', props.id)
+  emit('close', props.id)
 }
 
 function hide() {

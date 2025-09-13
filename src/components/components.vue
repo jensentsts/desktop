@@ -1,23 +1,46 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import Box from './box.vue'
 import Timetable from './Timetable.vue'
 import weather from './weather.vue'
 
+class Msg {
+  title: string = '空标题'
+  text: string = '请输入内容'
+  constructor(title: string = '空标题', text: string = '请输入内容') {
+    this.title = title
+    this.text = text
+  }
+}
+
 var s1 = ref(true)
 var s2 = ref(true)
+
+var msg_list = reactive<Array<Msg>>([])
 
 function switcher(id: String | undefined) {
   if (id == 's1') s1.value = false
   else s2.value = false
 }
+
+function wther_report(title: string, text: string) {
+  console.log(title, text)
+  msg_list.push(new Msg(title, text))
+}
+
+function test(id: string) {
+  alert('草' + id)
+}
 </script>
 
 <template>
   <div class="components-container">
-    <weather />
+    <weather @report="wther_report" />
     <Timetable />
-    <Box title="消息">Enjoy every moment<br />in every day!</Box>
+    <Box title="消息" @close="test" id="啊啊啊">Enjoy every moment<br />in every day!</Box>
+    <Box v-for="msg in msg_list" :title="msg.title">
+      {{ msg.text }}
+    </Box>
   </div>
 </template>
 

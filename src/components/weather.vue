@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import box from './box.vue'
 import weather_key from '../private/weather_key.json'
 
+const emit = defineEmits<{ (e: 'report', title: string, text: string): void }>()
+
 const select = 'tianqiapi'
 
 var temperature = ref(99)
@@ -14,7 +16,7 @@ var weather = ref('晴')
 
 var k_data = weather_key[select]
 
-if (select == 'gaode') {
+/*if (select == 'gaode') {
   let url = k_data['url'].replace('{key}', k_data['key']).replace('{city}', k_data['city_code'])
 
   fetch(url)
@@ -27,7 +29,8 @@ if (select == 'gaode') {
       temperature.value = wther_data['temperature']
       weather.value = wther_data['weather']
     })
-} else if (select == 'tianqiapi') {
+} else */
+if (select == 'tianqiapi') {
   let url = k_data['url']
     .replace('{appid}', k_data['appid'])
     .replace('{appsecret}', k_data['appsecret'])
@@ -41,6 +44,10 @@ if (select == 'gaode') {
       temperature.value = data['tem'].split('.')[0]
       temperature_max.value = data['tem1']
       temperature_min.value = data['tem2']
+      for (let i = 0; i < data['alarm'].length; i++) {
+        console.log(data['alarm'][i]['alarm_title'])
+        emit('report', data['alarm'][i]['alarm_title'], data['alarm'][i]['alarm_content'])
+      }
     })
 }
 </script>
