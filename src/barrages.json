@@ -30,7 +30,30 @@
     "代码重构就像整理房间，越整理越乱。",
     "编程是一种创造性的劳动，而不是机械的重复。所以我从不debug我的代码。",
     "好的程序员写代码，优秀的程序员写文档，伟大的程序员写测试。",
-    "我是一条很长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长的弹幕！"
+    "我是一条很长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长的弹幕！",
+
+    "春风得意马蹄疾，一日看尽长安花。",
+    "采菊东篱下，悠然见南山。",
+    "醉后不知天在水，满船清梦压星河。",
+    "青山一道同云雨，明月何曾是两乡。",
+    "欲买桂花同载酒，终不似，少年游。",
+    "世间无限丹青手，一片伤心画不成。",
+    "最是人间留不住，朱颜辞镜花辞树。",
+    "人生如逆旅，我亦是行人。",
+    "一别都门三改火，天涯踏尽红尘。",
+    "曾经沧海难为水，除却巫山不是云。",
+    "Hello World!",
+    "404 Not Found",
+    "NullPointerException",
+    "Segmentation fault",
+    "SyntaxError: invalid syntax",
+    "Stack overflow",
+    "It's a feature, not a bug.",
+    "Works on my machine.",
+    "I have no idea what I'm doing.",
+    "Copy-paste from Stack Overflow",
+    "First solve the problem. Then write the code.",
+    "Measuring programming progress by lines of code is like measuring aircraft building progress by weight."
   ],
 
   "with_color": [
@@ -53,6 +76,54 @@
     {
       "text": "66666666",
       "color": "#0000FF"
+    },
+    {
+      "text": "恭喜发财",
+      "color": "#FFD700"
+    },
+    {
+      "text": "AWSL",
+      "color": "#FF69B4"
+    },
+    {
+      "text": "yyds",
+      "color": "#00BFFF"
+    },
+    {
+      "text": "前方高能预警！",
+      "color": "#FF0000"
+    },
+    {
+      "text": "啊啊啊我死了",
+      "color": "#FF1493"
+    },
+    {
+      "text": "哈哈哈哈哈哈哈",
+      "color": "#FFD700"
+    },
+    {
+      "text": "泪目了",
+      "color": "#1E90FF"
+    },
+    {
+      "text": "名场面",
+      "color": "#32CD32"
+    },
+    {
+      "text": "梦开始的地方",
+      "color": "#9370DB"
+    },
+    {
+      "text": "全体起立！",
+      "color": "#FF4500"
+    },
+    {
+      "text": "DNA动了",
+      "color": "#00BFFF"
+    },
+    {
+      "text": "承包这个笑容",
+      "color": "#FF69B4"
     }
   ]
 }
