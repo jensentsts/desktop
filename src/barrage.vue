@@ -246,6 +246,7 @@ function animationend(trackId: string, barrageId: number) {
 
 .barrage:hover {
   animation-play-state: paused;
+  z-index: 99999;
 }
 
 @keyframes move-r2l {

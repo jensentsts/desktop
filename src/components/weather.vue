@@ -19,15 +19,15 @@ const wind_map = {
 }
 
 var temperature = ref(99)
-var city_name = ref('北京 昌平')
+var city_name = ref('北京')
 var temperature_min = ref(99)
 var temperature_max = ref(99)
-var air_condition = ref('')
 var weather = ref('晴')
 var wind_rotate = ref({ rotate: '90deg' })
 
 var k_data = weather_key[select]
-var wther_data = {}
+var air_level = ''
+var air_tips = ''
 
 /*if (select == 'gaode') {
   let url = k_data['url'].replace('{key}', k_data['key']).replace('{city}', k_data['city_code'])
@@ -51,7 +51,6 @@ if (select == 'tianqiapi') {
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
-      wther_data = data
       city_name.value = data.city
       weather.value = data['wea']
       temperature.value = data['tem'].split('.')[0]
@@ -61,11 +60,16 @@ if (select == 'tianqiapi') {
         console.log(data['alarm'][i]['alarm_title'])
         emit('report', data['alarm'][i]['alarm_title'], data['alarm'][i]['alarm_content'])
       }
+      air_level = data['air_level']
+      air_tips = data['air_tips']
+      if (data['win'] in wind_map) {
+        wind_rotate.value.rotate = wind_map[data['win'] as keyof typeof wind_map]
+      }
     })
 }
 
 function air_condition_report(id: string | number) {
-  emit('report', '空气质量：' + wther_data['air_level'], wther_data['air_tips'])
+  emit('report', '空气质量：' + air_level, air_tips)
 }
 </script>
 
@@ -86,7 +90,7 @@ function air_condition_report(id: string | number) {
         <span class="wther-details">{{ temperature_min }}℃-{{ temperature_max }}℃</span>
       </div>
       <div class="wther-sep2"></div>
-      <div class="wind" :style="{ rotate: wind_map[wther_data['win']] }">
+      <div class="wind" :style="wind_rotate">
         <svg
           t="1757779516829"
           class="icon"

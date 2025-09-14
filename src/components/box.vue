@@ -25,7 +25,7 @@ const emit = defineEmits<{
 }>()
 
 var alive = ref(true)
-var this_style = ref({ animation: 'to-join 1s ease-out' })
+var this_style = ref({ animation: 'to-join .6s ease-out' })
 var is_hiding = ref(false)
 
 var read_to_close = false
@@ -35,7 +35,7 @@ function after_animation() {
     before_close()
   }
   // 抵制vue优化带来的bug
-  this_style.value = {}
+  this_style.value = { animation: '' }
   read_to_close = false
 }
 
